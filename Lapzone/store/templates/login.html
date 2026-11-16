@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-page" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: linear-gradient(135deg, #e6f2f7 0%, #f8f9fa 100%);">
+    <div style="max-width: 500px; width: 100%;">
+        
+        <!-- User Login Section -->
+        <div style="background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); padding: 3rem; margin-bottom: 2rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">👤</div>
+                <h2 style="font-size: 2rem; color: #2c3e50; margin-bottom: 0.5rem; font-weight: 700;">ورود / ثبت‌نام</h2>
+                <p style="color: #666; font-size: 1rem;">اگر حساب دارید نام کاربری و رمز را وارد کنید؛ برای ساخت حساب، ایمیل و تکرار رمز را هم بنویسید.</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="padding: 1rem; margin-bottom: 1.5rem; border-radius: 10px; {% if message.tags == 'error' %}background: #f8d7da; color: #721c24;{% else %}background: #d4edda; color: #155724;{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="username" style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600; font-size: 1rem;">
+                        نام کاربری
+                    </label>
+                    <input type="text" 
+                           id="username" 
+                           name="username" 
+                           placeholder="نام کاربری خود را وارد کنید"
+                           required
+                           style="width: 100%; padding: 1rem 1.5rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.3s ease; background: #f8f9fa;"
+                           onfocus="this.style.borderColor='#43cea2'; this.style.background='white';"
+                           onblur="this.style.borderColor='#e9ecef'; this.style.background='#f8f9fa';">
+                </div>
+
+                <div>
+                    <label for="password" style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600; font-size: 1rem;">
+                        رمز عبور
+                    </label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           placeholder="رمز عبور خود را وارد کنید"
+                           required
+                           style="width: 100%; padding: 1rem 1.5rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.3s ease; background: #f8f9fa;"
+                           onfocus="this.style.borderColor='#43cea2'; this.style.background='white';"
+                           onblur="this.style.borderColor='#e9ecef'; this.style.background='#f8f9fa';">
+                </div>
+
+                <div>
+                    <label for="email" style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600; font-size: 1rem;">
+                        ایمیل (برای حساب جدید)
+                    </label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="ایمیل خود را وارد کنید"
+                           style="width: 100%; padding: 1rem 1.5rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.3s ease; background: #f8f9fa;"
+                           onfocus="this.style.borderColor='#43cea2'; this.style.background='white';"
+                           onblur="this.style.borderColor='#e9ecef'; this.style.background='#f8f9fa';">
+                </div>
+
+                <div>
+                    <label for="password2" style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 600; font-size: 1rem;">
+                        تکرار رمز عبور (برای حساب جدید)
+                    </label>
+                    <input type="password"
+                           id="password2"
+                           name="password2"
+                           placeholder="رمز عبور را دوباره وارد کنید"
+                           style="width: 100%; padding: 1rem 1.5rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.3s ease; background: #f8f9fa;"
+                           onfocus="this.style.borderColor='#43cea2'; this.style.background='white';"
+                           onblur="this.style.borderColor='#e9ecef'; this.style.background='#f8f9fa';">
+                </div>
+
+                <button type="submit" 
+                        style="width: 100%; padding: 1.2rem; background: linear-gradient(135deg, #43cea2, #185a9d); color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 20px rgba(67,206,162,0.3); margin-top: 1rem;"
+                        onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(67,206,162,0.5)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(67,206,162,0.3)'">
+                    ورود / ثبت‌نام
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e9ecef;">
+                <p style="color: #666;">سامانه بر اساس نام کاربری شما ورود یا ساخت حساب را انجام می‌دهد.</p>
+            </div>
+        </div>
+
+        <!-- Admin Login Section -->
+        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 2.5rem; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(67,206,162,0.1); border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: rgba(255,215,0,0.1); border-radius: 50%;"></div>
+            
+            <div style="position: relative; z-index: 1; text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+                <h3 style="font-size: 1.5rem; color: white; margin-bottom: 0.5rem; font-weight: 700;">ورود مدیریت</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; margin-bottom: 2rem;">برای دسترسی به پنل مدیریت سایت</p>
+                
+                <a href="/admin/" 
+                   style="display: inline-block; padding: 1rem 2.5rem; background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.5); border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 1.1rem; transition: all 0.3s ease; backdrop-filter: blur(10px);"
+                   onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.borderColor='white'; this.style.transform='translateY(-3px)';"
+                   onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.borderColor='rgba(255,255,255,0.5)'; this.style.transform='translateY(0)';">
+                    ورود به پنل مدیریت
+                </a>
+                
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin: 0;">
+                        💡 نیاز به دسترسی مدیر دارید
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'home' %}" 
+               style="display: inline-flex; align-items: center; gap: 0.5rem; color: #666; text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;"
+               onmouseover="this.style.color='#43cea2';"
+               onmouseout="this.style.color='#666';">
+                ← بازگشت به صفحه اصلی
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+    .login-page {
+        padding: 1rem;
+    }
+    
+    .login-page > div > div {
+        padding: 2rem 1.5rem !important;
+    }
+}
+</style>
+{% endblock %}

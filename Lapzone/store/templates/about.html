@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <div class="about-section">
+        <h1>درباره Lapzone</h1>
+        <div class="about-content">
+            <div class="about-text">
+                <h2>تاریخچه ما</h2>
+                <p>Lapzone در سال ۱۴۰۰ با هدف ارائه بهترین لپ‌تاپ‌ها و تجهیزات کامپیوتری به مشتریان عزیز تأسیس شد. ما با بیش از ۳ سال تجربه در زمینه فروش و خدمات پس از فروش، یکی از معتبرترین فروشگاه‌های آنلاین لپ‌تاپ در ایران هستیم.</p>
+                
+                <h2>چرا Lapzone؟</h2>
+                <ul class="features-list">
+                    <li>✅ ضمانت اصالت تمامی محصولات</li>
+                    <li>🚚 ارسال رایگان به سراسر کشور</li>
+                    <li>🔧 خدمات پس از فروش ۲۴ ساعته</li>
+                    <li>💰 بهترین قیمت‌ها در بازار</li>
+                    <li>📞 پشتیبانی آنلاین ۲۴/۷</li>
+                </ul>
+
+                <h2>تیم ما</h2>
+                <p>تیم Lapzone متشکل از متخصصان مجرب در زمینه فناوری و فروش است که با هدف ارائه بهترین خدمات به مشتریان، همواره در حال بهبود و توسعه خدمات خود هستند.</p>
+
+                <h2>تماس با ما</h2>
+                <div class="contact-info">
+                    <p><strong>شماره تماس:</strong> 09945034109</p>
+                    <p><strong>تلگرام:</strong> @lapzone_support</p>
+                    <p><strong>ایمیل:</strong> info@lapzone.ir</p>
+                    <p><strong>آدرس:</strong> تهران، خیابان ولیعصر</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.about-section {
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
+
+.about-section h1 {
+    color: #43cea2;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #43cea2;
+    padding-bottom: 1rem;
+}
+
+.about-section h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem 0;
+    border-right: 4px solid #43cea2;
+    padding-right: 1rem;
+}
+
+.about-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.features-list li {
+    background: #f8f9fa;
+    padding: 1rem;
+    margin: 0.8rem 0;
+    border-radius: 8px;
+    border-right: 4px solid #43cea2;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.features-list li:hover {
+    transform: translateX(-10px);
+    background: #e8f5e8;
+}
+
+.contact-info {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+.contact-info p {
+    margin: 1rem 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1rem;
+    }
+    
+    .about-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .about-section h1 {
+        font-size: 2rem;
+    }
+    
+    .about-section h2 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+{% endblock %}

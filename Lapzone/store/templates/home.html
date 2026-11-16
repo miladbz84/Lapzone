@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+  <div class="category-container">
+    {% for category in categories %}
+      <div class="category-block">
+          <h3>{{ category.name }}</h3>
+          <div class="products-row">
+              {% for product in category.products.all %}
+                  <div class="product">
+                      <a href="{% url 'product_detail' product.pk %}">
+                          {% with main_img=product.get_main_image %}
+                              {% if main_img %}
+                                  <img src="{{ main_img.url }}" alt="{{ product.name }}" class="product-image">
+                              {% else %}
+                                  <div style="width: 100%; height: 200px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">بدون تصویر</div>
+                              {% endif %}
+                          {% endwith %}
+                          <h4>{{ product.name }}</h4>
+                          <p>{{ product.price|floatformat:0|intcomma:False }} تومان</p>
+                      </a>
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+{% endblock %}

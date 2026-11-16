@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="category-page">
+    <div class="category-header">
+        <h1>{{ category.name }}</h1>
+        <p>محصولات دسته‌بندی {{ category.name }}</p>
+    </div>
+
+    {% if products %}
+        <div class="products-grid">
+            {% for product in products %}
+                <div class="product-card">
+                    <div class="product-image-container">
+                        {% with main_img=product.get_main_image %}
+                            {% if main_img %}
+                                <img src="{{ main_img.url }}" alt="{{ product.name }}" class="product-image">
+                            {% else %}
+                                <div class="no-image">بدون تصویر</div>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <p class="product-description">{{ product.description|truncatewords:20 }}</p>
+                        <div class="product-price">{{ product.price|floatformat:0|intcomma:False }} تومان</div>
+                        
+                        <div class="product-stock" style="text-align: center; margin-bottom: 1rem; font-size: 0.9rem; color: #666;">
+                            {% if product.stock > 0 %}
+                                موجودی: <strong style="color: #43cea2;">{{ product.stock }} عدد</strong>
+                            {% else %}
+                                <span style="color: #e74c3c; font-weight: bold;">ناموجود</span>
+                            {% endif %}
+                        </div>
+                        <div class="product-actions">
+                            <a href="{% url 'product_detail' product.pk %}" class="view-btn">مشاهده جزئیات</a>
+                            {% if product.stock > 0 %}
+                            <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+                                {% csrf_token %}
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <label for="qty-{{ product.pk }}" style="font-size: 0.9rem; color: #666; white-space: nowrap;">تعداد:</label>
+                                    <input type="number" id="qty-{{ product.pk }}" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                           style="flex: 1; padding: 0.5rem; border: 2px solid #43cea2; border-radius: 6px; text-align: center; font-size: 0.95rem; outline: none; max-width: 80px;">
+                                    <button type="submit" class="add-to-cart-btn" style="flex: 2;">افزودن به سبد</button>
+                                </div>
+                            </form>
+                            {% else %}
+                            <button disabled style="background: #ccc; color: #999; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; width: 100%; cursor: not-allowed;">ناموجود</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-products">
+            <div class="no-products-content">
+                <h2>محصولی در این دسته‌بندی یافت نشد</h2>
+                <p>در حال حاضر محصولی در دسته‌بندی {{ category.name }} موجود نیست.</p>
+                <a href="{% url 'home' %}" class="back-to-home">بازگشت به صفحه اصلی</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.category-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.category-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.category-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.category-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.product-image-container {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.1);
+}
+
+.no-image {
+    width: 100%;
+    height: 100%;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-name {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.product-description {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    height: 3.2rem;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 1.4rem;
+    color: #43cea2;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.product-actions {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.view-btn {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.view-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.add-to-cart-form {
+    margin: 0;
+}
+
+.add-to-cart-btn {
+    background: #ffd700;
+    color: #333;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.add-to-cart-btn:hover {
+    background: #ffed4e;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.no-products {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.no-products-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.no-products-content h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.no-products-content p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.back-to-home {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.back-to-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .category-page {
+        padding: 1rem;
+    }
+    
+    .category-header h1 {
+        font-size: 2rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .product-actions {
+        flex-direction: row;
+    }
+    
+    .view-btn,
+    .add-to-cart-btn {
+        flex: 1;
+    }
+}
+</style>
+{% endblock %}

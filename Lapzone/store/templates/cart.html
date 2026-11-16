@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+    <h2 style="text-align: center; color: #2d3e50; font-size: 2rem; margin-bottom: 2rem;">سبد خرید شما</h2>
+
+    {% if cart_items %}
+        <div style="background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: linear-gradient(135deg, #43cea2, #185a9d); color: white;">
+                        <th style="padding: 15px; text-align: center; font-weight: bold; width: 100px;">تصویر</th>
+                        <th style="padding: 15px; text-align: right; font-weight: bold;">نام محصول</th>
+                        <th style="padding: 15px; text-align: center; font-weight: bold;">تعداد</th>
+                        <th style="padding: 15px; text-align: center; font-weight: bold;">قیمت واحد</th>
+                        <th style="padding: 15px; text-align: center; font-weight: bold;">قیمت کل</th>
+                        <th style="padding: 15px; text-align: center; font-weight: bold;">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr style="border-bottom: 1px solid #eee; transition: background 0.3s ease;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background=''">
+                            <td style="padding: 15px; text-align: center;">
+                                {% if item.image %}
+                                    <img src="{{ item.image }}" alt="{{ item.name }}" style="width:80px; height:80px; object-fit:cover; border-radius:10px; border:2px solid #eee;">
+                                {% else %}
+                                    <div style="width:80px; height:80px; border-radius:10px; background:#f7f7f7; display:flex; align-items:center; justify-content:center; color:#aaa; border:2px solid #eee; margin: 0 auto;">بدون تصویر</div>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px; color: #333; font-weight: 600; font-size: 1.1rem;">{{ item.name }}</td>
+                            <td style="padding: 15px; text-align: center;">
+                                <form method="post" action="{% url 'update_cart_quantity' item.id %}" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" 
+                                           style="width: 70px; padding: 0.5rem; border: 2px solid #43cea2; border-radius: 8px; text-align: center; font-size: 1rem; outline: none;"
+                                           onchange="this.form.submit()">
+                                </form>
+                                <div style="font-size: 0.85rem; color: #888; margin-top: 0.3rem;">موجودی: {{ item.product.stock }}</div>
+                            </td>
+                            <td style="padding: 15px; text-align: center; color: #555; font-size: 1.1rem;">{{ item.price|floatformat:0|intcomma:False }} تومان</td>
+                            <td style="padding: 15px; text-align: center; color: #43cea2; font-weight: bold; font-size: 1.2rem;">
+                                {{ item.line_total|floatformat:0|intcomma:False }} تومان
+                            </td>
+                            <td style="padding: 15px; text-align: center;">
+                                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" style="color: #fff; background: linear-gradient(135deg, #e74c3c, #c0392b); padding: 0.6rem 1.2rem; border-radius: 8px; border: 0; font-weight: bold; transition: all 0.3s ease; display: inline-block; cursor: pointer;"
+                                            onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        ❌ حذف
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #43cea2, #185a9d); color: white; padding: 2rem; border-radius: 15px; margin-top: 2rem; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: bold;">جمع کل سبد خرید</h3>
+            <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1.5rem;">{{ total|floatformat:0|intcomma:False }} تومان</div>
+            <a href="{% url 'checkout' %}"
+               style="color: #fff; background: rgba(255,255,255,0.2); padding: 1rem 3rem; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 1.2rem; display: inline-block; border: 2px solid white; transition: all 0.3s ease;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.transform='translateY(-3px)'" 
+               onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)'">
+                🛒 ادامه خرید
+            </a>
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+            <p style="color: #888; font-size: 1.3rem; margin-bottom: 2rem;">در حال حاضر سبد خرید خالی است.</p>
+            <a href="{% url 'home' %}" 
+               style="color: #fff; background: linear-gradient(135deg, #43cea2, #185a9d); padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-block;">
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

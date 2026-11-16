@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <div class="contact-section">
+        <h1>تماس با ما</h1>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>اطلاعات تماس</h2>
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <div class="contact-icon">📞</div>
+                        <h3>تلفن</h3>
+                        <p>09945034109</p>
+                        <a href="tel:09945034109" class="contact-btn">تماس</a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <h3>تلگرام</h3>
+                        <p>@lapzone_support</p>
+                        <a href="https://t.me/lapzone_support" target="_blank" class="contact-btn">ارسال پیام</a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">✉️</div>
+                        <h3>ایمیل</h3>
+                        <p>info@lapzone.ir</p>
+                        <a href="mailto:info@lapzone.ir" class="contact-btn">ارسال ایمیل</a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">📍</div>
+                        <h3>آدرس</h3>
+                        <p>تهران، خیابان ولیعصر</p>
+                        <a href="#" class="contact-btn">مشاهده روی نقشه</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-section">
+                <h2>فرم تماس</h2>
+                <form class="contact-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">نام و نام خانوادگی</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">ایمیل</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">شماره تماس</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">موضوع</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">انتخاب کنید</option>
+                            <option value="سفارش">سفارش محصول</option>
+                            <option value="پشتیبانی">پشتیبانی فنی</option>
+                            <option value="بازگشت">بازگشت کالا</option>
+                            <option value="سایر">سایر موارد</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">پیام شما</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">ارسال پیام</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.contact-section {
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
+
+.contact-section h1 {
+    color: #43cea2;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #43cea2;
+    padding-bottom: 1rem;
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.contact-info h2,
+.contact-form-section h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    border-right: 4px solid #43cea2;
+    padding-right: 1rem;
+}
+
+.contact-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.contact-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: #43cea2;
+}
+
+.contact-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.contact-card h3 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-btn {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.contact-form {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #43cea2;
+    box-shadow: 0 0 0 3px rgba(67,206,162,0.1);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1rem;
+    }
+    
+    .contact-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .contact-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-section h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}

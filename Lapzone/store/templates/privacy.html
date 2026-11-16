@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <div class="privacy-section">
+        <h1>حریم خصوصی</h1>
+        <div class="privacy-content">
+            <div class="privacy-intro">
+                <p>در Lapzone، حریم خصوصی شما برای ما بسیار مهم است. این سند توضیح می‌دهد که چگونه اطلاعات شخصی شما را جمع‌آوری، استفاده و محافظت می‌کنیم.</p>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>اطلاعاتی که جمع‌آوری می‌کنیم</h2>
+                <ul>
+                    <li>اطلاعات شخصی: نام، آدرس ایمیل، شماره تلفن و آدرس</li>
+                    <li>اطلاعات سفارش: محصولات خریداری شده، تاریخ سفارش و مبلغ</li>
+                    <li>اطلاعات فنی: آدرس IP، نوع مرورگر و سیستم عامل</li>
+                    <li>کوکی‌ها: برای بهبود تجربه کاربری شما</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>چگونه از اطلاعات شما استفاده می‌کنیم</h2>
+                <ul>
+                    <li>پردازش و ارسال سفارشات شما</li>
+                    <li>ارائه خدمات پشتیبانی مشتری</li>
+                    <li>ارسال اطلاعیه‌ها و پیشنهادات ویژه</li>
+                    <li>بهبود خدمات و محصولات ما</li>
+                    <li>انجام تحلیل‌های آماری</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>اشتراک‌گذاری اطلاعات</h2>
+                <p>ما اطلاعات شخصی شما را با اشخاص ثالث به اشتراک نمی‌گذاریم، مگر در موارد زیر:</p>
+                <ul>
+                    <li>با رضایت صریح شما</li>
+                    <li>برای ارائه خدمات مورد نیاز (مانند ارسال سفارشات)</li>
+                    <li>در صورت الزام قانونی</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>امنیت اطلاعات</h2>
+                <p>ما از اقدامات امنیتی مناسب برای محافظت از اطلاعات شما استفاده می‌کنیم:</p>
+                <ul>
+                    <li>رمزگذاری SSL برای انتقال اطلاعات</li>
+                    <li>دسترسی محدود به اطلاعات شخصی</li>
+                    <li>بررسی منظم سیستم‌های امنیتی</li>
+                    <li>آموزش کارکنان در زمینه حفاظت از اطلاعات</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>حقوق شما</h2>
+                <p>شما حق دارید:</p>
+                <ul>
+                    <li>به اطلاعات شخصی خود دسترسی داشته باشید</li>
+                    <li>اطلاعات نادرست را اصلاح کنید</li>
+                    <li>درخواست حذف اطلاعات خود را بدهید</li>
+                    <li>از دریافت پیام‌های تبلیغاتی انصراف دهید</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section-item">
+                <h2>تماس با ما</h2>
+                <p>اگر سوالی در مورد این سیاست حریم خصوصی دارید، با ما تماس بگیرید:</p>
+                <div class="contact-details">
+                    <p><strong>تلفن:</strong> 09945034109</p>
+                    <p><strong>ایمیل:</strong> info@lapzone.ir</p>
+                    <p><strong>تلگرام:</strong> @lapzone_support</p>
+                </div>
+            </div>
+
+            <div class="privacy-footer">
+                <p><em>آخرین به‌روزرسانی: مهر ۱۴۰۳</em></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.privacy-section {
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
+
+.privacy-section h1 {
+    color: #43cea2;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #43cea2;
+    padding-bottom: 1rem;
+}
+
+.privacy-content {
+    line-height: 1.8;
+}
+
+.privacy-intro {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    border-right: 4px solid #43cea2;
+}
+
+.privacy-intro p {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.privacy-section-item {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: #fafafa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.privacy-section-item h2 {
+    color: #2c3e50;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    border-right: 4px solid #43cea2;
+    padding-right: 1rem;
+}
+
+.privacy-section-item p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-section-item ul {
+    margin: 1rem 0;
+    padding-right: 2rem;
+}
+
+.privacy-section-item li {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.contact-details {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.contact-details p {
+    margin: 0.5rem 0;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.privacy-footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e9ecef;
+}
+
+.privacy-footer p {
+    color: #666;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1rem;
+    }
+    
+    .privacy-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .privacy-section h1 {
+        font-size: 2rem;
+    }
+    
+    .privacy-section-item {
+        padding: 1rem;
+    }
+    
+    .privacy-section-item h2 {
+        font-size: 1.4rem;
+    }
+}
+</style>
+{% endblock %}

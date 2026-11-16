@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <p>محصولات انتخاب‌شده: {{ selected_ids|length }}</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% for product_id in selected_ids %}
+      <input type="hidden" name="{{ action_checkbox_name }}" value="{{ product_id }}">
+    {% endfor %}
+    <input type="hidden" name="action" value="{{ action_name }}">
+    <input type="hidden" name="select_across" value="{{ select_across }}">
+    <button type="submit" class="default">انتقال محصولات</button>
+  </form>
+{% endblock %}

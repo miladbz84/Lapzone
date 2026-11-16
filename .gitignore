@@ -1,0 +1,45 @@
+﻿# Python bytecode and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases, dumps, and backups
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+*.dump
+*.bak
+*.backup
+
+# Django generated files
+**/staticfiles/
+media/uploads/
+
+# IDE and editor files
+.idea/
+.vscode/
+.cursor/
+
+# Test, coverage, and temporary output
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage.xml
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db

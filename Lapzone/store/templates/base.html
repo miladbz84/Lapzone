@@ -1,0 +1,491 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lapzone</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+
+        #messages {
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          z-index: 9999;
+          min-width: 200px;
+        }
+
+        .message {
+          background: #f0f0f0;
+          color: #333;
+          padding: 10px 15px;
+          margin-bottom: 8px;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+          animation: fadeIn 0.5s;
+        }
+
+        .message.success {
+          background: #d4edda;
+          color: #155724;
+        }
+
+        .message.error {
+          background: #f8d7da;
+          color: #721c24;
+        }
+
+        .message.warning {
+          background: #fff3cd;
+          color: #856404;
+        }
+
+        @keyframes fadeIn {
+          from {opacity: 0; transform: translateY(-10px);}
+          to {opacity: 1; transform: translateY(0);}
+        }
+
+        nav a, nav button {
+          margin-left: 10px;
+          text-decoration: none;
+          color: blue;
+          font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <!-- دکمه منوی همبرگری (راست‌ترین) -->
+            <div class="header-menu-wrap">
+              <button class="hamburger-menu-toggle" id="hamburger-menu-toggle" type="button" aria-controls="hamburger-menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+
+              <!-- منوی همبرگری (دسکتاپ و موبایل) -->
+              <nav class="hamburger-menu" id="hamburger-menu">
+                <ul class="hamburger-menu-list">
+                  <li><a href="/">🏠 خانه</a></li>
+                  <li class="menu-item-dropdown">
+                    <a href="#" class="menu-dropdown-toggle">📦 محصولات</a>
+                    <ul class="menu-dropdown">
+                      <li><a href="{% url 'search' %}?q=HP">HP</a></li>
+                      <li><a href="{% url 'search' %}?q=Dell">Dell</a></li>
+                      <li><a href="{% url 'search' %}?q=Lenovo">Lenovo</a></li>
+                      <li><a href="{% url 'search' %}?q=Asus">Asus</a></li>
+                      <li><a href="{% url 'search' %}?q=Apple">Apple</a></li>
+                      <li><a href="{% url 'search' %}?q=Acer">Acer</a></li>
+                      <li><a href="{% url 'search' %}?q=Microsoft">Microsoft Surface</a></li>
+                      <li><a href="{% url 'search' %}?q=MSI">MSI</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="{% url 'about' %}">ℹ️ درباره ما</a></li>
+                  <li><a href="{% url 'contact' %}">📞 تماس با ما</a></li>
+                  <li><a href="{% url 'cart' %}">🛒 سبد خرید</a></li>
+                  {% if user.is_authenticated %}
+                    <li class="menu-user-info">
+                      <span>👤 {{ user.username }}</span>
+                    </li>
+                    <li><a href="{% url 'profile' %}">👤 پروفایل کاربری</a></li>
+                  {% else %}
+                    <li><a href="{% url 'login' %}" class="header-login-menu-link">🔑 ورود / ثبت‌نام</a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+
+            <!-- لوگو و نام سایت -->
+            <div class="logo-section">
+                <a href="/" class="logo-link">
+                    <img src="{% static 'images/logo.png' %}" alt="Lapzone Logo" class="logo-image" onerror="this.style.display='none'">
+                    <h1 class="site-title">Lapzone</h1>
+                </a>
+            </div>
+
+            <!-- فرم جستجو -->
+            <div class="header-search">
+                <form method="get" action="{% url 'search' %}" class="search-form">
+                    <input type="text" name="q" placeholder="جستجو در محصولات..." value="{{ request.GET.q }}" class="search-input">
+                    <button type="submit" class="search-btn">
+                        <span class="search-icon">🔍</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-actions">
+                <!-- سبد خرید -->
+                <a href="{% url 'cart' %}" class="cart-link">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-text">سبد خرید</span>
+                    <span class="cart-count" id="cart-count">{{ cart_count|default:0 }}</span>
+                </a>
+
+                <!-- منوی کاربر (ورود/ثبت‌نام) -->
+                <div class="user-section">
+                    {% if user.is_authenticated %}
+                      <div class="profile-menu" id="profile-menu">
+                        <button class="profile-menu-toggle" id="profile-menu-toggle" type="button" aria-controls="profile-menu-panel" aria-expanded="false">
+                          <span class="profile-avatar" aria-hidden="true">👤</span>
+                          <span class="profile-menu-label">{{ user.first_name|default:user.username }}</span>
+                          <span class="profile-menu-chevron" aria-hidden="true">⌄</span>
+                        </button>
+                        <nav class="profile-menu-panel" id="profile-menu-panel" aria-label="منوی پروفایل" hidden>
+                          <a href="{% url 'profile' %}">ویرایش اطلاعات</a>
+                          <a href="{% url 'password_change' %}">تغییر گذرواژه</a>
+                          <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">خروج از حساب</button>
+                          </form>
+                        </nav>
+                      </div>
+                    {% else %}
+                        <div class="auth-links">
+                          <a href="{% url 'login' %}" class="auth-link register-link">ورود / ثبت‌نام</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    {% if messages %}
+      <div id="messages">
+        {% for message in messages %}
+          <div class="message {{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <!-- اطلاعات تماس -->
+            <div class="footer-section contact-info">
+                <h3>تماس با ما</h3>
+                <div class="contact-item">
+                    <i class="icon phone">📞</i>
+                    <span>شماره تماس: 09945034109</span>
+                </div>
+                <div class="contact-item">
+                    <i class="icon telegram">📱</i>
+                    <a href="https://t.me/lapzone_support" target="_blank">ارتباط از طریق تلگرام</a>
+                </div>
+                <div class="contact-item">
+                    <i class="icon email">✉️</i>
+                    <span>ایمیل: info@lapzone.ir</span>
+                </div>
+                <div class="contact-item">
+                    <i class="icon location">📍</i>
+                    <span>آدرس: زنجان، چهار راه سعدی</span>
+                </div>
+            </div>
+
+            <!-- لینک‌های سریع -->
+            <div class="footer-section quick-links">
+                <h3>لینک‌های سریع</h3>
+                <ul>
+                    <li><a href="/">خانه</a></li>
+                    <li><a href="/cart/">سبد خرید</a></li>
+                    <li><a href="/about/">درباره ما</a></li>
+                    <li><a href="/contact/">تماس با ما</a></li>
+                    <li><a href="/privacy/">حریم خصوصی</a></li>
+                    <li><a href="/terms/">شرایط و قوانین</a></li>
+                </ul>
+            </div>
+
+            <!-- دسته‌بندی‌ها -->
+            <div class="footer-section categories">
+                <h3>دسته‌بندی محصولات</h3>
+                <div class="brand-logos" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:12px; align-items:center;">
+                    <a href="{% url 'search' %}?q=HP" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">HP</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Dell" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Dell</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Lenovo" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Lenovo</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Asus" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Asus</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Apple" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Apple</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Acer" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Acer</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=Microsoft%20Surface" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">Microsoft Surface</span>
+                    </a>
+                    <a href="{% url 'search' %}?q=MSI" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; padding:4px 0; border-radius:10px;">
+                        <span style="font-weight:700;">MSI</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- شبکه‌های اجتماعی -->
+            <div class="footer-section social-media">
+                <h3>ما را دنبال کنید</h3>
+                <div class="social-links">
+                    <a href="https://t.me/lapzone_official" target="_blank" class="social-link telegram">
+                        <i>📱</i>
+                        <span>تلگرام</span>
+                    </a>
+                    <a href="https://instagram.com/lapzone_ir" target="_blank" class="social-link instagram">
+                        <i>📷</i>
+                        <span>اینستاگرام</span>
+                    </a>
+                    <a href="https://wa.me/989945034109" target="_blank" class="social-link whatsapp">
+                        <i>💬</i>
+                        <span>واتساپ</span>
+                    </a>
+                    <a href="mailto:info@lapzone.ir" class="social-link email">
+                        <i>✉️</i>
+                        <span>ایمیل</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- اطلاعات شرکت -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="company-info">
+                    <p>&copy; ۱۴۰۳ Lapzone - تمامی حقوق محفوظ است</p>
+                    <p>ساخته شده توسط میلاد بازرگان</p>
+                </div>
+                <div class="footer-badges">
+                    <span class="badge">✅ ضمانت اصالت</span>
+                    <span class="badge">🚚 ارسال رایگان</span>
+                    <span class="badge">🔧 خدمات پس از فروش</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+      // Message timeout functionality
+      setTimeout(function() {
+        const messages = document.getElementById('messages');
+        if (messages) {
+          messages.style.transition = "opacity 1s ease";
+          messages.style.opacity = "0";
+          setTimeout(() => messages.remove(), 1000);
+        }
+      }, 3000);
+
+      // Header and Footer functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        // Hamburger menu toggle
+        const hamburgerMenuToggle = document.getElementById('hamburger-menu-toggle');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        
+        if (hamburgerMenuToggle && hamburgerMenu) {
+          hamburgerMenuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isExpanded = hamburgerMenu.classList.toggle('active');
+            this.classList.toggle('active', isExpanded);
+            this.setAttribute('aria-expanded', String(isExpanded));
+          });
+
+          // Close menu when clicking outside
+          document.addEventListener('click', function(e) {
+            if (!hamburgerMenu.contains(e.target) && !hamburgerMenuToggle.contains(e.target)) {
+              hamburgerMenu.classList.remove('active');
+              hamburgerMenuToggle.classList.remove('active');
+              hamburgerMenuToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          // Handle dropdown in menu
+          const dropdownToggle = hamburgerMenu.querySelector('.menu-dropdown-toggle');
+          const dropdown = hamburgerMenu.querySelector('.menu-dropdown');
+          const dropdownParent = hamburgerMenu.querySelector('.menu-item-dropdown');
+          if (dropdownToggle && dropdown && dropdownParent) {
+            dropdownToggle.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              dropdown.classList.toggle('active');
+              dropdownParent.classList.toggle('active');
+            });
+          }
+
+          // Close menu when clicking on a link (except dropdown toggle)
+          const menuLinks = hamburgerMenu.querySelectorAll('a:not(.menu-dropdown-toggle)');
+          menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+              hamburgerMenu.classList.remove('active');
+              hamburgerMenuToggle.classList.remove('active');
+              hamburgerMenuToggle.setAttribute('aria-expanded', 'false');
+              if (dropdown) dropdown.classList.remove('active');
+              if (dropdownParent) dropdownParent.classList.remove('active');
+            });
+          });
+        }
+
+        const profileMenu = document.getElementById('profile-menu');
+        const profileMenuToggle = document.getElementById('profile-menu-toggle');
+        const profileMenuPanel = document.getElementById('profile-menu-panel');
+        if (profileMenu && profileMenuToggle && profileMenuPanel) {
+          profileMenuToggle.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', String(!isExpanded));
+            profileMenuPanel.hidden = isExpanded;
+          });
+
+          document.addEventListener('click', function(event) {
+            if (!profileMenu.contains(event.target)) {
+              profileMenuPanel.hidden = true;
+              profileMenuToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+              profileMenuPanel.hidden = true;
+              profileMenuToggle.setAttribute('aria-expanded', 'false');
+              profileMenuToggle.focus();
+            }
+          });
+        }
+
+        // Smooth scroll for footer links
+        const footerLinks = document.querySelectorAll('.footer-section a[href^="#"]');
+        footerLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          });
+        });
+
+        // Add click-to-call functionality for phone number
+        const phoneElement = document.querySelector('.contact-item .phone');
+        if (phoneElement) {
+          phoneElement.parentElement.addEventListener('click', function() {
+            const phoneNumber = '09945034109';
+            if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+              window.location.href = `tel:${phoneNumber}`;
+            } else {
+              // Copy to clipboard for desktop
+              navigator.clipboard.writeText(phoneNumber).then(() => {
+                alert('شماره تلفن کپی شد: ' + phoneNumber);
+              });
+            }
+          });
+          phoneElement.parentElement.style.cursor = 'pointer';
+        }
+
+        // Add hover effects for social links
+        const socialLinks = document.querySelectorAll('.social-link');
+        socialLinks.forEach(link => {
+          link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+          });
+          
+          link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+          });
+        });
+
+        // Add animation to badges
+        const badges = document.querySelectorAll('.badge');
+        badges.forEach((badge, index) => {
+          badge.style.animationDelay = `${index * 0.1}s`;
+          badge.style.animation = 'fadeInUp 0.6s ease forwards';
+        });
+
+        // Add scroll-to-top functionality
+        const scrollToTopBtn = document.createElement('button');
+        scrollToTopBtn.innerHTML = '↑';
+        scrollToTopBtn.className = 'scroll-to-top';
+        scrollToTopBtn.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #43cea2, #185a9d);
+          color: white;
+          border: none;
+          font-size: 20px;
+          cursor: pointer;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          transition: all 0.3s ease;
+          z-index: 1000;
+          display: none;
+        `;
+        
+        document.body.appendChild(scrollToTopBtn);
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+          if (window.pageYOffset > 300) {
+            scrollToTopBtn.style.display = 'block';
+          } else {
+            scrollToTopBtn.style.display = 'none';
+          }
+        });
+
+        // Scroll to top functionality
+        scrollToTopBtn.addEventListener('click', function() {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+
+        // Add hover effect to scroll to top button
+        scrollToTopBtn.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.1)';
+        });
+        
+        scrollToTopBtn.addEventListener('mouseleave', function() {
+          this.style.transform = 'scale(1)';
+        });
+      });
+
+      // Add CSS animation keyframes
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .scroll-to-top:hover {
+          transform: scale(1.1) !important;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+</body>
+</html>

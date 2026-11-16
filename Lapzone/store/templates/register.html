@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>ثبت‌نام</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="نام کاربری">
+    <input type="email" name="email" placeholder="ایمیل">
+    <input type="password" name="password1" placeholder="رمز عبور">
+    <input type="password" name="password2" placeholder="تکرار رمز عبور">
+    <button type="submit">ثبت‌نام</button>
+  </form>
+
+  {% if messages %}
+    {% for m in messages %}
+      <p>{{ m }}</p>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

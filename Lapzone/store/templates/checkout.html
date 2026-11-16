@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+    <h2>صفحه پرداخت</h2>
+
+    <h3>جزئیات سبد خرید</h3>
+    <table>
+        <tr>
+            <th>نام محصول</th>
+            <th>تعداد</th>
+            <th>قیمت واحد</th>
+            <th>قیمت کل</th>
+        </tr>
+        {% for item in cart_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price|floatformat:0|intcomma:False }} تومان</td>
+                <td>{{ item.line_total|floatformat:0|intcomma:False }} تومان</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>جمع کل: {{ total|floatformat:0|intcomma:False }} تومان</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="address">آدرس ارسال</label>
+            <textarea id="address" name="address" required></textarea>
+        </div>
+        <button type="submit">تکمیل سفارش</button>
+    </form>
+{% endblock %}

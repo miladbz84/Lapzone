@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="account-page">
+  <div class="account-panel">
+    <header class="account-heading">
+      <p>حساب کاربری</p>
+      <h1>ویرایش اطلاعات</h1>
+      <span>اطلاعات تماس و نشانی خود را به‌روز نگه دارید.</span>
+    </header>
+
+    <form method="post" class="account-form">
+      {% csrf_token %}
+      {{ user_form.non_field_errors }}
+      {{ profile_form.non_field_errors }}
+
+      <h2>اطلاعات شخصی</h2>
+      <div class="account-grid">
+        {% for field in user_form %}
+          <div class="account-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<span class="account-error">{{ error }}</span>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <h2>اطلاعات تماس و نشانی</h2>
+      <div class="account-grid">
+        {% for field in profile_form %}
+          <div class="account-field{% if field.name == 'address' %} account-field-wide{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<span class="account-error">{{ error }}</span>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="account-actions">
+        <button type="submit" class="account-submit">ذخیره تغییرات</button>
+        <a href="{% url 'home' %}" class="account-cancel">بازگشت به فروشگاه</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
